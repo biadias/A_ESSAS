@@ -8,6 +8,7 @@
 
 require("rvest")
 library(tidyverse)
+library(here)
 
 # URL for scraping
 url <- "https://essas.arc.hokudai.ac.jp"
