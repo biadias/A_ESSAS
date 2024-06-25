@@ -26,16 +26,13 @@ links <- page %>%
 internal_links <- links[grep("^https?://essas.arc.hokudai.ac.jp", links)]
 
 # Initialize the sitemap
-sitemap <- data.frame(
-  Page = character(),
-  Parent = character(),
-  stringsAsFactors = FALSE
-)
+sitemap <- data.frame(Page = character(),
+                      Parent = character(),
+                      stringsAsFactors = FALSE)
 
 #-------------------------------------------
 # Function to recursively build sitemap
 build_sitemap <- function(url, parent = NULL) {
-  
   # Print current URL being processed (for debugging)
   print(paste("Processing:", url))
   
@@ -52,13 +49,15 @@ build_sitemap <- function(url, parent = NULL) {
   internal_links <- links[grep("^https?://essas.arc.hokudai.ac.jp", links)]
   
   # Add current page to sitemap
-  new_entry <- data.frame(Page = url, Parent = parent, stringsAsFactors = FALSE)
+  new_entry <- data.frame(Page = url,
+                          Parent = parent,
+                          stringsAsFactors = FALSE)
   sitemap <<- rbind(sitemap, new_entry)
   
   # Recursively build sitemap for child pages
   for (link in internal_links) {
     if (!(link %in% sitemap$Page)) {
-      build_sitemap(link, parent= url) # Set current URL as parent for child links
+      build_sitemap(link, parent = url) # Set current URL as parent for child links
     }
   }
 }
@@ -67,7 +66,7 @@ build_sitemap <- function(url, parent = NULL) {
 start_url <- "https://essas.arc.hokudai.ac.jp"
 
 # Start building the sitemap from the homepage
-build_sitemap(start_url, parent=start_url)
+build_sitemap(start_url, parent = start_url)
 
 # Display the resulting sitemap (for debugging)
 print(sitemap)
@@ -121,7 +120,7 @@ sitemap$Text <- sapply(sitemap$Page, function(url) {
 })
 
 #save local
-write.csv(sitemap, file= "ESSAS_sitemap.csv")
+write.csv(sitemap, file = "ESSAS_sitemap.csv")
 
 # Save into google sheets
 
@@ -133,5 +132,3 @@ write.csv(sitemap, tmp_csv, row.names = FALSE)
 
 drive_file <- drive_upload(tmp_csv, name = "ESSAS_sitemap.csv", type = "text/csv")
 drive_file
-
-
